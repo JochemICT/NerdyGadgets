@@ -51,6 +51,9 @@ $databaseConnection = connectToDatabase();
             <li>
                 <a href="browse.php" class="HrefDecoration"><i class="fas fa-search search"></i> Zoeken</a>
             </li>
+            <li class="nav-item">
+                <a href="cart.php" class="HrefDecoration"><i class="fas fa-shopping-cart" style="color:white;"></i></a>
+            </li>
         </ul>
 
 
