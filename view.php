@@ -9,8 +9,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
     $_SESSION['cart'][] = array(
         'productID' => $_POST['productID'],
     );
-    echo "<script>alert('Het product is successvol toegevoegd aan je winkelmandje.')</script>";
     header("Refresh: 2");
+
 }
 ?>
 <div id="CenteredContent">

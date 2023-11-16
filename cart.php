@@ -92,7 +92,7 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
         echo "<input type='hidden' name='action' value='change_quantity'>";
         echo "<input type='hidden' name='productID' value='" . $StockItem['StockItemID'] . "'>";
         echo "<p>Aantal: 
-                    <input type='number' style='width: 65px; height:35px !important' value='{$item['quantity']}' name='quantity' min='1'> 
+                    <input type='number' style='width: 60px; height:30px !important' value='{$item['quantity']}' name='quantity' min='1'> 
                     <button type='submit' class='change_quantity'>&#10003;</button
                </p> ";
         echo "</form>";
