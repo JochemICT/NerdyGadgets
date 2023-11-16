@@ -47,9 +47,25 @@ $databaseConnection = connectToDatabase();
             </ul>
         </div>
 <!-- code voor US3: zoeken -->
-
-
-
+        <ul id="ul-class-navigation">
+            <li>
+                <a href="browse.php" class="HrefDecoration"><i class="fas fa-search search"></i> Zoeken</a>
+            </li>
+            <li class="nav-item">
+                <a href="cart.php" class="HrefDecoration">
+                    <i class="fas fa-shopping-cart"></i>
+                    <?php
+                    $cartTotal = 0;
+                    if (isset($_SESSION['cart'])) {
+                        foreach ($_SESSION['cart'] as $item) {
+                            $cartTotal++;
+                        }
+                    }
+                    echo "( " . $cartTotal . " )";
+                    ?>
+                </a>
+            </li>
+        </ul>
 <!-- einde code voor US3 zoeken -->
     </div>
     <div class="row" id="Content">
