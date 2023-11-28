@@ -1,6 +1,5 @@
 <!-- dit bestand bevat alle code voor de pagina die categorieën laat zien -->
 <?php
-//Test
 include __DIR__ . "/header.php";
 $StockGroups = getStockGroups($databaseConnection);
 

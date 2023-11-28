@@ -4,6 +4,14 @@ include __DIR__ . "/header.php";
 
 $StockItem = getStockItem($_GET['id'], $databaseConnection);
 $StockItemImage = getStockItemImage($_GET['id'], $databaseConnection);
+
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
+    $_SESSION['cart'][] = array(
+        'productID' => $_POST['productID'],
+    );
+    header("Refresh: 2");
+
+}
 ?>
 <div id="CenteredContent">
     <?php
@@ -82,6 +90,10 @@ $StockItemImage = getStockItemImage($_GET['id'], $databaseConnection);
                     <div class="CenterPriceLeftChild">
                         <p class="StockItemPriceText"><b><?php print sprintf("€ %.2f", $StockItem['SellPrice']); ?></b></p>
                         <h6> Inclusief BTW </h6>
+                        <form method="post">
+                            <input type="hidden" name="productID" value="<?php print $StockItem["StockItemID"]; ?>">
+                            <button type="submit">Voeg toe</button>
+                        </form>
                     </div>
                 </div>
             </div>

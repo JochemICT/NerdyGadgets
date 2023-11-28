@@ -4,7 +4,7 @@ include __DIR__ . "/header.php";
 
 $ReturnableResult = null;
 $Sort = "SellPrice";
-$SortName = "price_low_high";
+        $SortName = "price_low_high";
 
 $AmountOfPages = 0;
 $queryBuildResult = "";
@@ -31,7 +31,6 @@ if (isset($_GET['page_number'])) {
 }
 
 // code deel 1 van User story: Zoeken producten
-// <voeg hier de code in waarin de zoekcriteria worden opgebouwd>
 $SearchString = "";
 
 if (isset($_GET['search_string'])) {
@@ -89,22 +88,18 @@ if ($SearchString != "") {
         $queryBuildResult .= "SI.StockItemID ='$SearchString'";
     }
 }
-
-
-// <einde van de code voor zoekcriteria>
 // einde code deel 1 van User story: Zoeken producten
 
 
 $Offset = $PageNumber * $ProductsOnPage;
 
-if ($CategoryID != "") {
+if ($CategoryID != "") { 
     if ($queryBuildResult != "") {
-        $queryBuildResult .= " AND ";
+    $queryBuildResult .= " AND ";
     }
 }
 
 // code deel 2 van User story: Zoeken producten
-// <voeg hier de code in waarin het zoekresultaat opgehaald wordt uit de database>
 if ($CategoryID == "") {
     if ($queryBuildResult != "") {
         $queryBuildResult = "WHERE " . $queryBuildResult;
@@ -140,13 +135,10 @@ if ($CategoryID == "") {
     $Result = mysqli_stmt_get_result($Statement);
     $Result = mysqli_fetch_all($Result, MYSQLI_ASSOC);
 }
-
-
-// <einde van de code voor zoekresultaat>
 // einde deel 2 van User story: Zoeken producten
 
 if ($CategoryID !== "") {
-    $Query = "
+$Query = "
            SELECT SI.StockItemID, SI.StockItemName, SI.MarketingComments, TaxRate, RecommendedRetailPrice,
            ROUND(SI.TaxRate * SI.RecommendedRetailPrice / 100 + SI.RecommendedRetailPrice,2) as SellPrice,
            QuantityOnHand,
@@ -183,20 +175,19 @@ if (isset($amount)) {
 }
 
 
-function getVoorraadTekst($actueleVoorraad) {
-    if ($actueleVoorraad > 1000) {
-        return "Ruime voorraad beschikbaar.";
-    } else {
-        return "Voorraad: $actueleVoorraad";
+    function getVoorraadTekst($actueleVoorraad) {
+        if ($actueleVoorraad > 1000) {
+            return "Ruime voorraad beschikbaar.";
+        } else {
+            return "Voorraad: $actueleVoorraad";
+        }
     }
-}
-function berekenVerkoopPrijs($adviesPrijs, $btw) {
-    return $btw * $adviesPrijs / 100 + $adviesPrijs;
-}
+    function berekenVerkoopPrijs($adviesPrijs, $btw) {
+		return $btw * $adviesPrijs / 100 + $adviesPrijs;
+    }
 ?>
 
 <!-- code deel 3 van User story: Zoeken producten : de html -->
-<!-- de zoekbalk links op de pagina  -->
 <div id="FilterFrame"><h2 class="FilterText"><i class="fas fa-filter"></i> Filteren </h2>
     <form>
         <div id="FilterOptions">
@@ -244,9 +235,6 @@ function berekenVerkoopPrijs($adviesPrijs, $btw) {
     </form>
 </div>
 </div>
-
-
-<!-- einde zoekresultaten die links van de zoekbalk staan -->
 <!-- einde code deel 3 van User story: Zoeken producten  -->
 
 <div id="ResultsArea" class="Browse">
@@ -256,8 +244,7 @@ function berekenVerkoopPrijs($adviesPrijs, $btw) {
             ?>
             <!--  coderegel 1 van User story: bekijken producten  -->
             <a class="ListItem" href='view.php?id=<?php print $row['StockItemID']; ?>'>
-
-                <!-- einde coderegel 1 van User story: bekijken producten   -->
+            <!-- einde coderegel 1 van User story: bekijken producten   -->
                 <div id="ProductFrame">
                     <?php
                     if (isset($row['ImagePath'])) { ?>
@@ -280,26 +267,20 @@ function berekenVerkoopPrijs($adviesPrijs, $btw) {
                     <p class="StockItemComments"><?php print $row["MarketingComments"]; ?></p>
                     <h4 class="ItemQuantity"><?php print getVoorraadTekst($row["QuantityOnHand"]); ?></h4>
                 </div>
-                <!--  coderegel 2 van User story: bekijken producten  -->
+            <!--  coderegel 2 van User story: bekijken producten  -->
             </a>
-
-
-
             <!--  einde coderegel 2 van User story: bekijken producten  -->
         <?php } ?>
 
         <form id="PageSelector">
-
-            <!-- code deel 4 van User story: Zoeken producten  -->
+		
+<!-- code deel 4 van User story: Zoeken producten  -->
             <input type="hidden" name="search_string" id="search_string"
                    value="<?php if (isset($_GET['search_string'])) {
                        print ($_GET['search_string']);
                    } ?>">
             <input type="hidden" name="sort" id="sort" value="<?php print ($_SESSION['sort']); ?>">
-
-
-
-            <!-- einde code deel 4 van User story: Zoeken producten  -->
+<!-- einde code deel 4 van User story: Zoeken producten  -->
             <input type="hidden" name="category_id" id="category_id" value="<?php if (isset($_GET['category_id'])) {
                 print ($_GET['category_id']);
             } ?>">
