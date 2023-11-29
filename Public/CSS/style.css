@@ -478,3 +478,79 @@ ul#ul-class-price li {
     border: 1px rgb(98, 158, 255) solid;
     color: #fff;
 }
+
+.cart-item {
+    display: flex;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.product-image img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+    margin-right: 15px;
+    border-radius: 8px;
+}
+
+.product-information {
+    flex-grow: 1;
+}
+
+.product-information p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.product-price {
+    text-align: right;
+}
+
+.product-price p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.button-container {
+    margin-top: 10px;
+}
+
+.button {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #45a049;
+    color: white;
+}
+
+.product-remove {
+    text-align: right;
+}
+
+.product-remove button{
+    margin-top: 40px;
+    margin-left: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: red;
+    border: 0;
+    border-radius: 3px;
+}
+.change_quantity{
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #4CAF50;
+    border: 0;
+    border-radius: 3px;
+}
