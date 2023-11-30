@@ -23,10 +23,6 @@ $payment_intent_obj = \Stripe\PaymentIntent::retrieve($payment_intent);
     <h2>Bedankt voor je bestelling</h2>
 
             <table style="margin-bottom: 50px; margin-left: -9px">
-                <tr>
-                    <th>Besteld op</th>
-                    <td>28 september 2022 om 23:05</td>
-                </tr>
                 <?php
                 if (isset($session->customer_details)) {
                     $shippingAddress = $session->customer_details->address->line1;
