@@ -1,6 +1,7 @@
 <!-- dit bestand bevat alle code die verbinding maakt met de database -->
 <?php
 
+
 function connectToDatabase() {
     $Connection = null;
 
@@ -50,6 +51,22 @@ function getStockGroups($databaseConnection) {
     $StockGroups = mysqli_fetch_all($Result, MYSQLI_ASSOC);
     return $StockGroups;
 }
+//function getTemperature($databaseConnection)
+//{
+//    $query = "
+//SELECT Temperature
+//FROM coldroomtemperatures
+//WHERE ColdRoomSensorNumber = 5";
+//    $statement = mysqli_prepare($databaseConnection, $query);
+//    mysqli_stmt_execute($statement);
+//    $result = mysqli_stmt_get_result($statement);
+//    $temperatureData = mysqli_fetch_assoc($result);
+//
+//    return $temperatureData['Temperature'] ?? null;
+//}
+
+
+
 
 function getStockItem($id, $databaseConnection) {
     $Result = null;
@@ -59,7 +76,8 @@ function getStockItem($id, $databaseConnection) {
             (RecommendedRetailPrice*(1+(TaxRate/100))) AS SellPrice, 
             StockItemName,
             CONCAT('Voorraad: ',QuantityOnHand)AS QuantityOnHand,
-            SearchDetails, 
+            SearchDetails,
+            IsChillerStock AS IsChilledStock,
             (CASE WHEN (RecommendedRetailPrice*(1+(TaxRate/100))) > 50 THEN 0 ELSE 6.95 END) AS SendCosts, MarketingComments, CustomFields, SI.Video,
             (SELECT ImagePath FROM stockgroups JOIN stockitemstockgroups USING(StockGroupID) WHERE StockItemID = SI.StockItemID LIMIT 1) as BackupImagePath   
             FROM stockitems SI 

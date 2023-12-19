@@ -2,8 +2,10 @@
 <?php
 include __DIR__ . "/header.php";
 
+
 $StockItem = getStockItem($_GET['id'], $databaseConnection);
 $StockItemImage = getStockItemImage($_GET['id'], $databaseConnection);
+//$chilledStockTemperature = getTemperature($databaseConnection);
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
     $_SESSION['cart'][] = array(
@@ -12,6 +14,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
     header("Refresh: 2");
 
 }
+
+
+?>
+
+<?php
+$ColdRoomSensorNumber = 5;
 ?>
 <div id="CenteredContent">
     <?php
@@ -98,6 +106,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
                 </div>
             </div>
         </div>
+
+        <!--temperatuur-->
+<!--        --><?php //if($Result['IsChilledStock'] == 1){ ?>
+<!--            <div class="QuantityText">Huidige temperatuur: --><?php //echo ROUND($chilledStockTemperature, 1)?><!-- °C</div>-->
+<!--        --><?php //} else { ?>
+<!--            <div class="QuantityText"></div>-->
+<!--        --><?php //} ?>
+
+        <!--temperatuur-->
 
         <div id="StockItemDescription">
             <h3>Artikel beschrijving</h3>
