@@ -11,7 +11,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
     $_SESSION['cart'][] = array(
         'productID' => $_POST['productID'],
     );
-    header("Refresh: 2");
+    echo "<script>alert('Product successvol toegevoegd aan het winkelmandje.')</script>";
+    header("Refresh: 0");
 
 }
 $ResultTemp = array(

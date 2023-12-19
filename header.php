@@ -8,7 +8,7 @@ $databaseConnection = connectToDatabase();
 <html lang="en">
 <head>
     <title>NerdyGadgets</title>
-
+<!--test-->
     <!-- Javascript -->
     <script src="Public/JS/fontawesome.js"></script>
     <script src="Public/JS/jquery.min.js"></script>
