@@ -95,3 +95,28 @@ function getStockItemImage($id, $databaseConnection) {
 
     return $R;
 }
+
+function getProductReviews($id, $databaseConnection){
+    $Query = "
+        SELECT R.*, SI.*, C.*
+        FROM reviews R
+        JOIN StockItems SI on SI.StockItemID = R.StockItemID
+        JOIN Customers C on C.CustomerID = R.CustomerID
+        WHERE R.StockItemID = ?";
+
+    $Statement = mysqli_prepare($databaseConnection, $Query);
+    mysqli_stmt_bind_param($Statement, "i", $id);
+    mysqli_stmt_execute($Statement);
+    $R = mysqli_stmt_get_result($Statement);
+    $R = mysqli_fetch_all($R, MYSQLI_ASSOC);
+
+    $totalStars = 0;
+
+    foreach ($R as $review) {
+        $totalStars += $review['Amount'];
+    }
+
+    $average = count($R) > 0 ? ($totalStars / count($R)) : 0;
+
+    return ['reviews' => $R, 'average' => $average];
+}

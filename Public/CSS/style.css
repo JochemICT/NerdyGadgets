@@ -554,3 +554,11 @@ ul#ul-class-price li {
     border: 0;
     border-radius: 3px;
 }
+
+.StockItemSpecifications{
+    border: 1px solid #CCC;
+}
+
+.checked {
+    color: orange;
+}

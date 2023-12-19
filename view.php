@@ -1,9 +1,11 @@
 <!-- dit bestand bevat alle code voor de pagina die één product laat zien -->
 <?php
 include __DIR__ . "/header.php";
-
 $StockItem = getStockItem($_GET['id'], $databaseConnection);
 $StockItemImage = getStockItemImage($_GET['id'], $databaseConnection);
+$Reviews = getProductReviews($_GET['id'], $databaseConnection);
+
+//Informatie over de sterren
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
     $_SESSION['cart'][] = array(
@@ -141,8 +143,119 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
             }
             ?>
         </div>
+        <hr>
+        <div id="StockItemReviews">
+            <h2>Reviews</h2>
+            <div class="average">
+                <?php
+                if(sizeof($Reviews) != 0) {
+                    $filledStars = floor($Reviews['average']);
+                    $percentageFilled = ($Reviews['average'] - $filledStars) * 100;
+                    $emptyStars = 5 - $filledStars;
+
+                    for ($i = 0; $i < $filledStars; $i++) {
+                        echo '<span class="filled-star">&#9733;</span>';
+                    }
+
+                    // Weergeef de laatste ster gedeeltelijk gevuld
+                    if ($percentageFilled > 0) {
+                        echo '<span class="filled-star" style="width: ' . $percentageFilled . '%;">&#9733;</span>';
+                    }
+
+                    // Weergeef lege sterren
+                    for ($i = 0; $i < $emptyStars; $i++) {
+                        echo '<span class="empty-star">&#9733;</span>';
+                    }
+
+                    echo "<span class='avg-text'>(" . $Reviews['average'] . ")</span>";
+                }
+                ?>
+            </div>
+            <hr>
+
+            <div class="reviews">
+                <?php
+                    if(sizeof($Reviews) != 0){
+                        $totalStars = 0;
+                        foreach($Reviews as $review){
+//                            echo "<b>" . $review['Title'] . "</b> (" . $review['CustomerName'] . ", " . date('d-m-Y', strtotime($review['Created_at']))  . ")";
+//                            echo "<br>";
+//
+//                            echo '<span class="fa fa-star checked"></span>';
+//                            echo '<span class="fa fa-star checked"></span>';
+//                            echo '<span class="fa fa-star checked"></span>';
+//                            echo '<span class="fa fa-star checked"></span>';
+//                            echo '<span class="fa fa-star checked"></span>';
+//
+//                            echo "<br>";
+//
+//
+//                            echo '<div class="row">';
+//                            echo '<div class="col-md-2">';
+//                            echo '<span style="color: green"> + </span>' . $review['PlusPoint1'] . '<br>';
+//                            echo '<span style="color: green"> + </span>' . $review['PlusPoint2'] . '<br>';
+//                            echo '<span style="color: green"> + </span>' . $review['PlusPoint3'] . '<br>';
+//                            echo '</div>';
+//
+//                            // Rechterkolom met 3 spans
+//                            echo '<div class="col-md-2">';
+//                            echo '<span style="color: red"> - </span>' . $review['MinusPoint1'] . '<br>';
+//                            echo '</div>';
+//
+//                            echo '</div>'; // Sluit de rij
+//
+//                            echo "<br>";
+//
+//                            echo "<p style='width: 50%;'>" . nl2br($review['Description']) . "</p>";
+//
+//
+                        }
+                    }
+                ?>
+            </div>
+        </div>
         <?php
     } else {
         ?><h2 id="ProductNotFound">Het opgevraagde product is niet gevonden.</h2><?php
     } ?>
 </div>
+
+<style>
+    .checked {
+        color: orange;
+    }
+
+
+    .average {
+        font-size: 30px;
+        display: flex;
+        align-items: center;
+    }
+
+    .average h3{
+        margin-right: 10px !important;
+    }
+
+    .average h3,
+    .average span {
+        margin: 0; /* Remove default margin */
+    }
+
+    .rating {
+        display: inline-block;
+    }
+
+    .filled-star {
+        color: gold;
+    }
+
+    .empty-star {
+        color: lightgray;
+    }
+
+    .avg-text{
+
+            font-size: 25px; /* Grootte van de tekst aanpassen */
+            margin-left: 5px; /* Ruimte toevoegen tussen sterren en tekst */
+    }
+</style>
