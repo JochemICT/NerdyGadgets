@@ -51,19 +51,19 @@ function getStockGroups($databaseConnection) {
     $StockGroups = mysqli_fetch_all($Result, MYSQLI_ASSOC);
     return $StockGroups;
 }
-//function getTemperature($databaseConnection)
-//{
-//    $query = "
-//SELECT Temperature
-//FROM coldroomtemperatures
-//WHERE ColdRoomSensorNumber = 5";
-//    $statement = mysqli_prepare($databaseConnection, $query);
-//    mysqli_stmt_execute($statement);
-//    $result = mysqli_stmt_get_result($statement);
-//    $temperatureData = mysqli_fetch_assoc($result);
-//
-//    return $temperatureData['Temperature'] ?? null;
-//}
+function getTemperature($databaseConnection)
+{
+    $query = "
+SELECT Temperature
+FROM coldroomtemperatures
+WHERE ColdRoomSensorNumber = 5";
+    $statement = mysqli_prepare($databaseConnection, $query);
+    mysqli_stmt_execute($statement);
+    $result = mysqli_stmt_get_result($statement);
+    $temperatureData = mysqli_fetch_assoc($result);
+
+    return $temperatureData['Temperature'] ?? null;
+}
 
 
 

@@ -14,7 +14,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
     header("Refresh: 2");
 
 }
-
+$ResultTemp = array(
+    'IsChilledStock' => 1)
 
 ?>
 
@@ -108,11 +109,13 @@ $ColdRoomSensorNumber = 5;
         </div>
 
         <!--temperatuur-->
-<!--        --><?php //if($Result['IsChilledStock'] == 1){ ?>
-<!--            <div class="QuantityText">Huidige temperatuur: --><?php //echo ROUND($chilledStockTemperature, 1)?><!-- °C</div>-->
-<!--        --><?php //} else { ?>
-<!--            <div class="QuantityText"></div>-->
-<!--        --><?php //} ?>
+
+        <?php $chilledStockTemperature = getTemperature($databaseConnection);
+        if($ResultTemp['IsChilledStock'] == 1){ ?>
+            <div class="QuantityText">Huidige temperatuur: <?php echo ROUND($chilledStockTemperature, 1)?> °C</div>
+        <?php } else { ?>
+            <div class="QuantityText"></div>
+        <?php } ?>
 
         <!--temperatuur-->
 
