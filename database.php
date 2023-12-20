@@ -1,6 +1,8 @@
 <!-- dit bestand bevat alle code die verbinding maakt met de database -->
 <?php
 
+include __DIR__ . "/SQL_queries.php";
+
 function connectToDatabase() {
     $Connection = null;
 
@@ -94,4 +96,52 @@ function getStockItemImage($id, $databaseConnection) {
     $R = mysqli_fetch_all($R, MYSQLI_ASSOC);
 
     return $R;
+}
+
+function getEmail($email, $databaseConnection) {
+    $query = "
+        SELECT LogonName
+        FROM people
+        WHERE LogonName = '$email';
+    ";
+
+    $result = mysqli_query($databaseConnection, $query);
+
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        if ($row) {
+            return $row['LogonName'];
+        }
+    }
+    return null;
+}
+
+function getPassword($email, $databaseConnection){
+    $query = "
+        SELECT HashedPassword
+        FROM people
+        WHERE LogonName = '$email';
+    ";
+
+    $result = mysqli_query($databaseConnection, $query);
+
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        if ($row) {
+            return $row['HashedPassword'];
+        }
+    }
+    return null;
+}
+
+function hashPassword($password){
+    $password = hash('sha256', $password);
+    return $password;
+}
+
+function insertRegistration($voornaam, $achternaam, $email, $wachtwoord, $straatnaam, $huisnummer, $postcode, $woonplaats, $land, $databaseConnection) {
+    mysqli_query($databaseConnection, PeopleQuery($voornaam, $achternaam, $email, $wachtwoord));
+    $personID = PersonID($databaseConnection, $email);
+    mysqli_query($databaseConnection, CustomersQuery($voornaam, $achternaam, $personID, $huisnummer, $straatnaam, $postcode, $woonplaats, $land));
+    return true;
 }
