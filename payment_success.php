@@ -17,50 +17,52 @@ $session = \Stripe\Checkout\Session::retrieve($session_id);
 $payment_intent = $session->payment_intent;
 $payment_intent_obj = \Stripe\PaymentIntent::retrieve($payment_intent);
 
+print_r($_SESSION['order_info']);
+
 ?>
 
 <div id="CenteredContent">
     <h2>Bedankt voor je bestelling</h2>
 
             <table style="margin-bottom: 50px; margin-left: -9px">
-                <?php
-                if (isset($session->customer_details)) {
-                    $shippingAddress = $session->customer_details->address->line1;
-                    $shippingCity = $session->customer_details->address->city;
-                    $shippingPostalCode = $session->customer_details->address->postal_code;
-
-                    echo '<tr>';
-                    echo '<th>Adres</th>';
-                    echo '<td>' . $shippingAddress . '</td>';
-                    echo '</tr>';
-
-                    echo '<tr>';
-                    echo '<th>Stad</th>';
-                    echo '<td>' . $shippingCity . '</td>';
-                    echo '</tr>';
-
-                    echo '<tr>';
-                    echo '<th>Postcode</th>';
-                    echo '<td>' . $shippingPostalCode . '</td>';
-                    echo '</tr>';
-                }
-                ?>
+<!--                --><?php
+//                if (isset($session->customer_details)) {
+//                    $shippingAddress = $session->customer_details->address->line1;
+//                    $shippingCity = $session->customer_details->address->city;
+//                    $shippingPostalCode = $session->customer_details->address->postal_code;
+//
+//                    echo '<tr>';
+//                    echo '<th>Adres</th>';
+//                    echo '<td>' . $shippingAddress . '</td>';
+//                    echo '</tr>';
+//
+//                    echo '<tr>';
+//                    echo '<th>Stad</th>';
+//                    echo '<td>' . $shippingCity . '</td>';
+//                    echo '</tr>';
+//
+//                    echo '<tr>';
+//                    echo '<th>Postcode</th>';
+//                    echo '<td>' . $shippingPostalCode . '</td>';
+//                    echo '</tr>';
+//                }
+//                ?>
             </table>
 
-            <table style="margin-left: -9px">
-                <tr>
-                    <th>Betaalmethode</th>
-                    <td><?php echo $payment_intent_obj->payment_method_types[0] ?></td>
-                </tr>
-
-                <tr>
-                    <th>Status</th>
-                    <td><?php
-                        if($payment_intent_obj->status == 'succeeded'){
-                            echo "betaald";
-                        } else {
-                            echo "in behandeling.";
-                        } ?></td>
-                </tr>
-            </table>
+<!--            <table style="margin-left: -9px">-->
+<!--                <tr>-->
+<!--                    <th>Betaalmethode</th>-->
+<!--                    <td>--><?php //echo $payment_intent_obj->payment_method_types[0] ?><!--</td>-->
+<!--                </tr>-->
+<!---->
+<!--                <tr>-->
+<!--                    <th>Status</th>-->
+<!--                    <td>--><?php
+//                        if($payment_intent_obj->status == 'succeeded'){
+//                            echo "betaald";
+//                        } else {
+//                            echo "in behandeling.";
+//                        } ?><!--</td>-->
+<!--                </tr>-->
+<!--            </table>-->
 </div>

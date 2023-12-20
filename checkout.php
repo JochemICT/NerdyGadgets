@@ -52,7 +52,7 @@ $checkout_session = \Stripe\Checkout\Session::create([
     "cancel_url" => "http://localhost/NerdyGadgets/cart.php",
     "locale" => "nl",
     "line_items" => $lineItems,
-    'billing_address_collection' => 'required',
+    'billing_address_collection' => 'auto',
     'payment_method_configuration' => 'pmc_1OHtuNH8E5CxKfBaUrugwMvp',
     'customer_email' => $emailForm,
 ]);
