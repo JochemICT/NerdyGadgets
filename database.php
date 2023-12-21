@@ -37,7 +37,8 @@ function getHeaderStockGroups($databaseConnection) {
     return $HeaderStockGroups;
 }
 
-function getStockGroups($databaseConnection) {
+function getStockGroups($databaseConnection)
+{
     $Query = "
             SELECT StockGroupID, StockGroupName, ImagePath
             FROM stockgroups 
@@ -52,6 +53,39 @@ function getStockGroups($databaseConnection) {
     $StockGroups = mysqli_fetch_all($Result, MYSQLI_ASSOC);
     return $StockGroups;
 }
+function getTemperatureAndIsChillerStock($databaseConnection, $stockItemId)
+{
+    $query = "
+        SELECT Temperature
+        FROM coldroomtemperatures
+        WHERE ColdRoomSensorNumber = 5";
+    // query verkrijgt temperatuur uit de rij waar het coldroomsensornumber gelijk is aan 5
+    $statement = mysqli_prepare($databaseConnection, $query);
+    mysqli_stmt_execute($statement);
+    $result = mysqli_stmt_get_result($statement);
+    $temperatureData = mysqli_fetch_assoc($result);
+
+    $queryStockItems = "
+        SELECT IsChillerStock
+        FROM stockitems
+        WHERE StockItemID = ?";
+    // query verkrijgt ischillerstock waarde voor bekeken product
+    $statementStockItems = mysqli_prepare($databaseConnection, $queryStockItems);
+    mysqli_stmt_bind_param($statementStockItems, 'i', $stockItemId);
+    mysqli_stmt_execute($statementStockItems);
+    $resultStockItems = mysqli_stmt_get_result($statementStockItems);
+    $isChillerStockData = mysqli_fetch_assoc($resultStockItems);
+
+    // combineer de waarden en return
+    return [
+        'Temperature' => $temperatureData['Temperature'] ?? null,
+        'IsChillerStock' => $isChillerStockData['IsChillerStock'] ?? null
+    ];
+}
+
+
+
+
 
 function getStockItem($id, $databaseConnection) {
     $Result = null;
@@ -61,7 +95,8 @@ function getStockItem($id, $databaseConnection) {
             (RecommendedRetailPrice*(1+(TaxRate/100))) AS SellPrice, 
             StockItemName,
             CONCAT('Voorraad: ',QuantityOnHand)AS QuantityOnHand,
-            SearchDetails, 
+            SearchDetails,
+            IsChillerStock AS IsChillerStock,
             (CASE WHEN (RecommendedRetailPrice*(1+(TaxRate/100))) > 50 THEN 0 ELSE 6.95 END) AS SendCosts, MarketingComments, CustomFields, SI.Video,
             (SELECT ImagePath FROM stockgroups JOIN stockitemstockgroups USING(StockGroupID) WHERE StockItemID = SI.StockItemID LIMIT 1) as BackupImagePath   
             FROM stockitems SI 

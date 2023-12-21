@@ -6,6 +6,7 @@ $StockItemImage = getStockItemImage($_GET['id'], $databaseConnection);
 $Reviews = getProductReviews($_GET['id'], $databaseConnection);
 
 //Informatie over de sterren
+$chilledStockTemperature = getTemperature($databaseConnection);
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
     $_SESSION['cart'][] = array(
@@ -15,6 +16,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
     header("Refresh: 0");
 
 }
+
+?>
+
+<?php
+$ColdRoomSensorNumber = 5;
 ?>
 <div id="CenteredContent">
     <?php
@@ -83,6 +89,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
             ?>
 
 
+
             <h1 class="StockItemID">Artikelnummer: <?php print $StockItem["StockItemID"]; ?></h1>
             <h2 class="StockItemNameViewSize StockItemName">
                 <?php print $StockItem['StockItemName']; ?>
@@ -91,7 +98,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
             <div id="StockItemHeaderLeft">
                 <div class="CenterPriceLeft">
                     <div class="CenterPriceLeftChild">
-                        <p class="StockItemPriceText"><b><?php print sprintf("€ %.2f", $StockItem['SellPrice']); ?></b></p>
+                            <p class="StockItemPriceText"><b><?php print sprintf("€ %.2f", $StockItem['SellPrice']); ?></b></p>
                         <h6> Inclusief BTW </h6>
                         <form method="post">
                             <input type="hidden" name="productID" value="<?php print $StockItem["StockItemID"]; ?>">
@@ -101,6 +108,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
                 </div>
             </div>
         </div>
+
+
 
         <div id="StockItemDescription">
             <h3>Artikel beschrijving</h3>
@@ -116,6 +125,27 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
                 <th>Naam</th>
                 <th>Data</th>
                 </thead>
+                <tr>
+                    <td>Temperatuur</td>
+                    <td><?php
+                        $stockItemId = $StockItem['StockItemID'] ?? null;
+                        $tempAndIsChillerStock = getTemperatureAndIsChillerStock($databaseConnection, $stockItemId);
+                        if ($tempAndIsChillerStock !== false && isset($tempAndIsChillerStock['Temperature'])) {
+                        $chillerStockTemperature = $tempAndIsChillerStock['Temperature'];
+
+                        // Check of chillerstock 1 is
+                        if ($StockItem['IsChillerStock'] == 1) {
+                        // laat temp zien wanneer chillerstock 1 is
+                        echo round($chillerStockTemperature, 1) . ' °C';
+                        } else {
+                        // Wanneer chillerstock niet gelijk aan 1 is of niet beschikbaar is
+                        echo 'Er is geen temperatuur beschikbaar voor dit product';
+                        }
+                        } else {
+                        echo 'Temporarily unavailable';
+                        }?>
+                        </td>
+                </tr>
                 <?php
                 foreach ($CustomFields as $SpecName => $SpecText) { ?>
                     <tr>
