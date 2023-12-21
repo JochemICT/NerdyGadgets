@@ -98,11 +98,13 @@ $ColdRoomSensorNumber = 5;
             <div id="StockItemHeaderLeft">
                 <div class="CenterPriceLeft">
                     <div class="CenterPriceLeftChild">
-                            <p class="StockItemPriceText"><b><?php print sprintf("€ %.2f", $StockItem['SellPrice']); ?></b></p>
+                        <p class="StockItemPriceText"><b><?php print sprintf("€ %.2f", $StockItem['SellPrice']); ?></b></p>
                         <h6> Inclusief BTW </h6>
                         <form method="post">
                             <input type="hidden" name="productID" value="<?php print $StockItem["StockItemID"]; ?>">
-                            <button type="submit">Voeg toe</button>
+                            <div class="button-container">
+                            <button type="submit" class="button">Voeg toe</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -131,20 +133,20 @@ $ColdRoomSensorNumber = 5;
                         $stockItemId = $StockItem['StockItemID'] ?? null;
                         $tempAndIsChillerStock = getTemperatureAndIsChillerStock($databaseConnection, $stockItemId);
                         if ($tempAndIsChillerStock !== false && isset($tempAndIsChillerStock['Temperature'])) {
-                        $chillerStockTemperature = $tempAndIsChillerStock['Temperature'];
+                            $chillerStockTemperature = $tempAndIsChillerStock['Temperature'];
 
-                        // Check of chillerstock 1 is
-                        if ($StockItem['IsChillerStock'] == 1) {
-                        // laat temp zien wanneer chillerstock 1 is
-                        echo round($chillerStockTemperature, 1) . ' °C';
+                            // Check of chillerstock 1 is
+                            if ($StockItem['IsChillerStock'] == 1) {
+                                // laat temp zien wanneer chillerstock 1 is
+                                echo round($chillerStockTemperature, 1) . ' °C';
+                            } else {
+                                // Wanneer chillerstock niet gelijk aan 1 is of niet beschikbaar is
+                                echo 'Er is geen temperatuur beschikbaar voor dit product';
+                            }
                         } else {
-                        // Wanneer chillerstock niet gelijk aan 1 is of niet beschikbaar is
-                        echo 'Er is geen temperatuur beschikbaar voor dit product';
-                        }
-                        } else {
-                        echo 'Temporarily unavailable';
+                            echo 'Temporarily unavailable';
                         }?>
-                        </td>
+                    </td>
                 </tr>
                 <?php
                 foreach ($CustomFields as $SpecName => $SpecText) { ?>
@@ -256,47 +258,110 @@ $ColdRoomSensorNumber = 5;
             </div>
         </div>
         <?php
+        echo "<div class='ri-container'>";
+        $recItems = getRecommendedItems($databaseConnection, $StockItem['StockItemID']);
+        if(sizeof($recItems) > 0){
+            for($i = 0; $i < sizeof($recItems); $i++){
+                $StockItem = getStockItem($recItems[$i]['StockItemID'], $databaseConnection);
+                echo "<div class='recommended-items'>";
+
+                $StockItemImage = getStockItemImage($StockItem['StockItemID'], $databaseConnection);
+                echo $StockItem['StockItemName'] . "<br>";
+
+                echo "<div class='product-image'>";
+                if($StockItemImage){
+                    echo "<img src='Public/StockItemIMG/" . $StockItemImage[0]['ImagePath'] . "' width='200px'>";
+                }else{
+                    echo "<img src='Public/StockGroupIMG/" . $StockItem['BackupImagePath'] . "' width='200px'>"; // Group afbeelding
+                }
+                echo "</div>";
+                echo "<div class='product-price'>";
+                echo sprintf("€ %.2f", ($StockItem['SellPrice'])) . "<br>";
+                echo "</div>";
+                ?>
+                <form method="post" id="myForm">
+                    <input type="hidden" name="productID" value="<?php print $StockItem["StockItemID"]; ?>">
+                    <div class="button-container">
+                        <button class="button" type="submit">Voeg toe</button>
+                    </div>
+                </form>
+
+                <?php
+                echo "</div>";
+            }
+        }
+        echo "</div>";
     } else {
         ?><h2 id="ProductNotFound">Het opgevraagde product is niet gevonden.</h2><?php
     } ?>
 </div>
 
 <style>
-    .checked {
-        color: orange;
+    .ri-container {
+        margin-bottom: 3%;
+        margin-top: 2%;
     }
 
-
-    .average {
-        font-size: 30px;
-        display: flex;
-        align-items: center;
-    }
-
-    .average h3{
-        margin-right: 10px !important;
-    }
-
-    .average h3,
-    .average span {
-        margin: 0; /* Remove default margin */
-    }
-
-    .rating {
+    .recommended-items {
         display: inline-block;
+        margin-block: 3%;
+        text-align: center;
+        align-items: center;
+        border: 1px solid #ddd;
+        width: 23%; /* Set a fixed width for each item */
+        height: 23%;
+        margin: 1%; /* Adjust the margin as needed */
     }
 
-    .filled-star {
-        color: gold;
+    .product-image img {
+        width: 130px;
+        height: 130px;
+        object-fit: cover; /* Maintain aspect ratio and cover the container */
+        margin-right: 15px;
+        border-radius: 8px;
     }
 
-    .empty-star {
-        color: lightgray;
+    .product-price {
+        text-align: center;
     }
 
-    .avg-text{
-
-            font-size: 25px; /* Grootte van de tekst aanpassen */
-            margin-left: 5px; /* Ruimte toevoegen tussen sterren en tekst */
+    .product-price p {
+        margin: 0;
+        font-size: 18px;
+        font-weight: bold;
     }
+
+    .button-container {
+        margin-top: 10px;
+    }
+
+    .button {
+        display: inline-block;
+        margin-right: 10px;
+        padding: 10px 15px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .button:hover {
+        background-color: #45a049;
+        color: white;
+    }
+
+    .message {
+        display: none;
+        text-align: ;
+        color: white;
+        position: fixed;
+        top: 130px;
+        bottom: 50px;
+        left: 10px;
+        right: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+    }
+
 </style>
