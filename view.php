@@ -6,7 +6,7 @@ $StockItemImage = getStockItemImage($_GET['id'], $databaseConnection);
 $Reviews = getProductReviews($_GET['id'], $databaseConnection);
 
 //Informatie over de sterren
-$chilledStockTemperature = getTemperature($databaseConnection);
+$chilledStockTemperature = getTemperatureAndIsChillerStock($databaseConnection, $_GET['id']);
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
     $_SESSION['cart'][] = array(

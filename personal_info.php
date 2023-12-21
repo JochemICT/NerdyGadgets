@@ -9,6 +9,30 @@ $sn = $_SESSION['klantInfoArray'][1]['DeliveryAddressLine2'] ?? "";
 $pc = $_SESSION['klantInfoArray'][1]['DeliveryPostalCode'] ?? "";
 $wp = $_SESSION['klantInfoArray'][1]['DeliveryLocation'] ?? "";
 
+$groupedCart = [];
+$lineItems = [];
+
+$totalPrice = 0;
+
+foreach ($_SESSION['cart'] as $item) {
+    $productId = $item['productID'];
+    if (!isset($groupedCart[$productId])) {
+        $groupedCart[$productId] = $item;
+        $groupedCart[$productId]['quantity'] = 1;
+    } else {
+        $groupedCart[$productId]['quantity']++;
+    }
+}
+
+if(isset($_SESSION['order_info'])){
+    unset($_SESSION['order_info']);
+}else{
+    $_SESSION['order_info'] = [
+        "products" => $groupedCart,
+        "total_price" => $totalPrice
+    ];
+}
+
 ?>
 
 <div id="CenteredContent">

@@ -127,6 +127,15 @@ foreach($_SESSION['order_info']['products'] as $product){
 
 <script>
     function submitReview(stockItemID) {
+        var title = $('#reviewForm' + stockItemID + ' [name="review_title"]').val();
+        var description = $('#reviewForm' + stockItemID + ' [name="review_description"]').val();
+        var rating = $('#reviewForm' + stockItemID + ' [name="review_ranking"]:checked').val();
+
+        if (!title || !description || !rating) {
+            alert('De titel, beschrijving en rating zijn verplichte velden!');
+            return;
+        }
+
         $.ajax({
             type: 'POST',
             url: 'submit_review.php', // Vervang dit door de juiste URL voor de verwerking van de review op de server

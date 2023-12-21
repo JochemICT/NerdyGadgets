@@ -39,15 +39,6 @@ foreach ($groupedCart as $item) {
     $lineItems[] = $lineItem;
 }
 
-if(isset($_SESSION['order_info'])){
-    unset($_SESSION['order_info']);
-}else{
-    $_SESSION['order_info'] = [
-        "products" => $groupedCart,
-        "total_price" => $totalPrice
-    ];
-}
-
 $checkout_session_params = [
     "mode" => "payment",
     "success_url" => "http://localhost/NerdyGadgets/payment_success.php?session_id={CHECKOUT_SESSION_ID}",
