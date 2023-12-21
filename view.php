@@ -148,70 +148,81 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['productID'])){
             <h2>Reviews</h2>
             <div class="average">
                 <?php
-                if(sizeof($Reviews) != 0) {
-                    $filledStars = floor($Reviews['average']);
-                    $percentageFilled = ($Reviews['average'] - $filledStars) * 100;
-                    $emptyStars = 5 - $filledStars;
+                if (sizeof($Reviews) != 0) {
+                    $averageRating = $Reviews['average'];
+                    $filledStars = floor($averageRating);
+                    $remainingPercentage = ($averageRating - $filledStars) * 100;
 
+                    // Display filled stars
                     for ($i = 0; $i < $filledStars; $i++) {
                         echo '<span class="filled-star">&#9733;</span>';
                     }
 
-                    // Weergeef de laatste ster gedeeltelijk gevuld
-                    if ($percentageFilled > 0) {
-                        echo '<span class="filled-star" style="width: ' . $percentageFilled . '%;">&#9733;</span>';
-                    }
-
-                    // Weergeef lege sterren
+                    // Display empty stars
+                    $emptyStars = 5 - $filledStars; // Round down
                     for ($i = 0; $i < $emptyStars; $i++) {
                         echo '<span class="empty-star">&#9733;</span>';
                     }
 
-                    echo "<span class='avg-text'>(" . $Reviews['average'] . ")</span>";
+                    echo "<span class='avg-text'>(" . $averageRating . ")</span>";
                 }
+
+
                 ?>
             </div>
             <hr>
 
             <div class="reviews">
                 <?php
-                    if(sizeof($Reviews) != 0){
-                        $totalStars = 0;
-                        foreach($Reviews as $review){
-//                            echo "<b>" . $review['Title'] . "</b> (" . $review['CustomerName'] . ", " . date('d-m-Y', strtotime($review['Created_at']))  . ")";
-//                            echo "<br>";
-//
-//                            echo '<span class="fa fa-star checked"></span>';
-//                            echo '<span class="fa fa-star checked"></span>';
-//                            echo '<span class="fa fa-star checked"></span>';
-//                            echo '<span class="fa fa-star checked"></span>';
-//                            echo '<span class="fa fa-star checked"></span>';
-//
-//                            echo "<br>";
-//
-//
-//                            echo '<div class="row">';
-//                            echo '<div class="col-md-2">';
-//                            echo '<span style="color: green"> + </span>' . $review['PlusPoint1'] . '<br>';
-//                            echo '<span style="color: green"> + </span>' . $review['PlusPoint2'] . '<br>';
-//                            echo '<span style="color: green"> + </span>' . $review['PlusPoint3'] . '<br>';
-//                            echo '</div>';
-//
-//                            // Rechterkolom met 3 spans
-//                            echo '<div class="col-md-2">';
-//                            echo '<span style="color: red"> - </span>' . $review['MinusPoint1'] . '<br>';
-//                            echo '</div>';
-//
-//                            echo '</div>'; // Sluit de rij
-//
-//                            echo "<br>";
-//
-//                            echo "<p style='width: 50%;'>" . nl2br($review['Description']) . "</p>";
-//
-//
+                if (sizeof($Reviews) != 0) {
+                    $totalStars = 0;
+                    foreach ($Reviews['reviews'] as $review) {
+
+                        echo "<b>" . $review['Title'] . "</b> (" . $review['FullName'] . ", " . date('d-m-Y', strtotime($review['Created_at'])) . ")";
+                        echo "<br>";
+
+                        // Display stars
+                        $filledStars = round($review['Amount']);
+                        for ($i = 0; $i < 5; $i++) {
+                            echo '<span class="fa fa-star' . (($i < $filledStars) ? ' checked' : '') . '"></span>';
                         }
+                        echo " (" . $review['Amount'] . ")";
+                        echo "<br>";
+
+                        // Display plus points
+                        $plusPoints = array($review['PlusPoint1'], $review['PlusPoint2'], $review['PlusPoint3']);
+                        $plusPoints = array_filter($plusPoints); // Remove empty values
+                        if (!empty($plusPoints)) {
+                            echo '<div class="row">';
+                            echo '<div class="col-md-2">';
+                            foreach ($plusPoints as $point) {
+                                echo '<span style="color: green"> + </span>' . $point . '<br>';
+                            }
+                            echo '</div>';
+                            echo '</div>';
+                        }
+
+                        // Display minus points
+                        $minusPoints = array($review['MinusPoint1']);
+                        $minusPoints = array_filter($minusPoints); // Remove empty values
+                        if (!empty($minusPoints)) {
+                            echo '<div class="row">';
+                            echo '<div class="col-md-2">';
+                            foreach ($minusPoints as $point) {
+                                echo '<span style="color: red"> - </span>' . $point . '<br>';
+                            }
+                            echo '</div>';
+                            echo '</div>';
+                        }
+
+                        echo "<br>";
+
+                        echo "<p style='width: 50%;'>" . nl2br($review['Description']) . "</p>";
+                        echo "<hr>";
                     }
+                }
                 ?>
+
             </div>
         </div>
         <?php

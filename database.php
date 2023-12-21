@@ -177,13 +177,13 @@ function addReview($StockItemID, $CustomerID, $Title, $Description, $Amount, $Pl
 
 function getProductReviews($id, $databaseConnection){
     $Query = "
-        SELECT R.*, SI.*, C.*
+        SELECT R.*, SI.*, P.*
         FROM reviews R
         JOIN StockItems SI on SI.StockItemID = R.StockItemID
-        JOIN Customers C on C.CustomerID = R.CustomerID
+        JOIN People P on P.PersonID = R.CustomerID
         WHERE R.StockItemID = ?";
-
     $Statement = mysqli_prepare($databaseConnection, $Query);
+
     mysqli_stmt_bind_param($Statement, "i", $id);
     mysqli_stmt_execute($Statement);
     $R = mysqli_stmt_get_result($Statement);

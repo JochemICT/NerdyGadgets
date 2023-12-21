@@ -124,7 +124,7 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
     //Verder winkelen of betalen knoppen
     echo "<div class='button-container'>";
     echo "<a href='browse.php' class='button'>Verder winkelen</a>";
-    echo "<a href='checkout.php' class='button'>Bestel</a>";
+    echo "<a href='personal_info.php' class='button'>Ga verder</a>";
 }else{
     echo "Je winkelwagen is nog leeg.";
 }
