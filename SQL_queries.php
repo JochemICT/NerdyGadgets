@@ -148,6 +148,7 @@ function returnKlantInfo($databaseConnection, $email){
     $adresQuery = "  SELECT DeliveryAddressLine1, DeliveryAddressLine2, DeliveryPostalCode, DeliveryLocation, PostalAddressLine1
                 FROM customers
                 WHERE PrimaryContactPersonID = $personID;";
+
     $namenQuery = "   SELECT PreferredName, FullName, LogonName
                 FROM people
                 WHERE PersonID = $personID;";
@@ -162,6 +163,8 @@ function returnKlantInfo($databaseConnection, $email){
     while ($row = mysqli_fetch_assoc($namen)) {
         $klantInfoNaam[] = $row;
     }
+
+    $_SESSION['personID'] = $personID;
 
     $results = array_merge($klantInfoNaam, $klantInfoAdres);
     return $results;

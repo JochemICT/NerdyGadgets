@@ -84,6 +84,7 @@ function loggedIn(){
     if (isset($_POST['submitLogout'])) { //Bij het uitloggen worden de klantgegevens en de inhoud van het winkelmandje ge-unset
         $_SESSION['ingelogd'] = false;
         unset($_SESSION['klantInfoArray']);
+        unset($_SESSION['personID']);
         unset($_SESSION['cart']);
         echo "Sucessvol uitgelogd";
     }

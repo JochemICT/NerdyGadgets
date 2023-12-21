@@ -39,14 +39,16 @@ foreach ($groupedCart as $item) {
     $lineItems[] = $lineItem;
 }
 
-if(isset($_SESSION['klantInfoArray']) && $_SESSION['ingelogd']){
-    $emailForm = $_SESSION['klantInfoArray'][0]['LogonName'];
-}
-else{
-    $emailForm = "";
+if(isset($_SESSION['order_info'])){
+    unset($_SESSION['order_info']);
+}else{
+    $_SESSION['order_info'] = [
+        "products" => $groupedCart,
+        "total_price" => $totalPrice
+    ];
 }
 
-$checkout_session = \Stripe\Checkout\Session::create([
+$checkout_session_params = [
     "mode" => "payment",
     "success_url" => "http://localhost/NerdyGadgets/payment_success.php?session_id={CHECKOUT_SESSION_ID}",
     "cancel_url" => "http://localhost/NerdyGadgets/cart.php",
@@ -54,8 +56,14 @@ $checkout_session = \Stripe\Checkout\Session::create([
     "line_items" => $lineItems,
     'billing_address_collection' => 'auto',
     'payment_method_configuration' => 'pmc_1OHtuNH8E5CxKfBaUrugwMvp',
-    'customer_email' => $emailForm,
-]);
+];
+if (isset($_SESSION['klantInfoArray']) && $_SESSION['ingelogd']) {
+    $emailForm = $_SESSION['klantInfoArray'][0]['LogonName'];
+    $checkout_session_params['customer_email'] = $emailForm;
+}
+
+$checkout_session = \Stripe\Checkout\Session::create($checkout_session_params);
+
 
 http_response_code(303);
 header("Location: " . $checkout_session->url);

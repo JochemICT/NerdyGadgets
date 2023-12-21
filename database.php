@@ -145,3 +145,32 @@ function insertRegistration($voornaam, $achternaam, $email, $wachtwoord, $straat
     mysqli_query($databaseConnection, CustomersQuery($voornaam, $achternaam, $personID, $huisnummer, $straatnaam, $postcode, $woonplaats, $land));
     return true;
 }
+
+function wijzigVoorraad($id, $aantal, $databaseConnection){
+    $query = "
+        UPDATE stockitemholdings
+        SET QuantityOnHand=QuantityOnHand - ?
+        WHERE StockItemID=?";
+
+    $Statement = mysqli_prepare($databaseConnection, $query);
+    mysqli_stmt_bind_param($Statement, "ii", $aantal, $id);
+    $result = mysqli_stmt_execute($Statement);
+
+
+    return $result;
+}
+
+function addReview($StockItemID, $CustomerID, $Title, $Description, $Amount, $PlusPoint1, $PlusPoint2, $PlusPoint3, $MinusPoint1, $MinusPoint2, $MinusPoint3){
+    $databaseConnection = connectToDatabase();
+
+    $query = "INSERT INTO reviews (StockItemID, CustomerID, Title, Description, Amount, PlusPoint1, PlusPoint2, PlusPoint3, MinusPoint1, MinusPoint2, MinusPoint3) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $Statement = mysqli_prepare($databaseConnection, $query);
+    mysqli_stmt_bind_param($Statement, "iississssss", $StockItemID, $CustomerID, $Title, $Description, $Amount, $PlusPoint1, $PlusPoint2, $PlusPoint3, $MinusPoint1, $MinusPoint2, $MinusPoint3);
+    mysqli_stmt_execute($Statement);
+    $result = mysqli_stmt_get_result($Statement);
+
+    return $result;
+
+}
